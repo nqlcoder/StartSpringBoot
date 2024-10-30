@@ -45,7 +45,7 @@ public class UserService {
 
         HashSet<String> roles = new HashSet<>();
         roles.add((Role.USER.name()));
-        user.setRoles(roles);
+        //user.setRoles(roles);
         //luu db
         return userMapper.toUserResponse(repository.save(user));
     }
