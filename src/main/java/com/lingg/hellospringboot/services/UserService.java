@@ -9,6 +9,7 @@ import com.lingg.hellospringboot.exception.AppException;
 import com.lingg.hellospringboot.exception.ErrorCode;
 import com.lingg.hellospringboot.mapper.UserMapper;
 import com.lingg.hellospringboot.repositories.IUserRepository;
+import com.lingg.hellospringboot.repositories.RoleRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,6 +30,7 @@ import java.util.List;
 public class UserService {
     //    @Autowired
     IUserRepository repository;
+    RoleRepository roleRepository;
     //    @Autowired
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
@@ -76,6 +78,10 @@ public class UserService {
         User user = repository.findById(id).
                 orElseThrow(() -> new RuntimeException("User not found"));
         userMapper.updateUser(user, request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        var roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
         return userMapper.toUserResponse(repository.save(user));
     }
 
