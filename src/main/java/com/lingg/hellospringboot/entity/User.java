@@ -1,5 +1,6 @@
 package com.lingg.hellospringboot.entity;
 
+import com.lingg.hellospringboot.validatior.DobContraint;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
