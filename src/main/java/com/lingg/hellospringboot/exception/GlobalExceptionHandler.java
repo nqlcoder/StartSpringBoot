@@ -1,14 +1,20 @@
 package com.lingg.hellospringboot.exception;
 
 import com.lingg.hellospringboot.dto.request.ApiResponse;
+import jakarta.validation.ConstraintViolation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Map;
+import java.util.Objects;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    private static final String MIN_ATTRIBUTE = "min";
+
     //define nhung exception chua duoc liet ke
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception) {
@@ -44,14 +50,26 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiResponse> handlingMethodValidation(MethodArgumentNotValidException exception) {
         String enumKey = exception.getFieldError().getDefaultMessage();
         ErrorCode errorCode = ErrorCode.INVALID_KEY;
+        Map<String, Object> attibutes = null;
         try {
             errorCode = ErrorCode.valueOf(enumKey);
+
+            var constrainViolation = exception.getBindingResult()
+                    .getAllErrors().getFirst().unwrap(ConstraintViolation.class);
+            attibutes = constrainViolation.getConstraintDescriptor().getAttributes();
         } catch (IllegalArgumentException e) {
 
         }
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMessage());
+        apiResponse.setMessage(Objects.nonNull(attibutes) ?
+                mapAttribute(errorCode.getMessage(), attibutes)
+                : errorCode.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
+    }
+
+    private String mapAttribute(String message, Map<String, Object> attributes) {
+        String minValue = String.valueOf(attributes.get(MIN_ATTRIBUTE));
+        return message.replace("{" + MIN_ATTRIBUTE + "}", minValue);
     }
 }
