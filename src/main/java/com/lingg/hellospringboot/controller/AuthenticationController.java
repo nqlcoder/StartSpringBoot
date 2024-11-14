@@ -3,6 +3,7 @@ package com.lingg.hellospringboot.controller;
 import com.lingg.hellospringboot.dto.request.ApiResponse;
 import com.lingg.hellospringboot.dto.request.AuthenticationRequest;
 import com.lingg.hellospringboot.dto.request.IntrospectRequest;
+import com.lingg.hellospringboot.dto.request.LogoutRequest;
 import com.lingg.hellospringboot.dto.response.AuthenticationResponse;
 import com.lingg.hellospringboot.dto.response.IntrospectResponse;
 import com.lingg.hellospringboot.services.AuthenticationService;
@@ -37,6 +38,13 @@ public class AuthenticationController {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
+                .build();
+    }
+
+    @PostMapping("logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
                 .build();
     }
 }
