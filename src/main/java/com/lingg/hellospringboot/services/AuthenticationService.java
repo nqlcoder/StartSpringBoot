@@ -3,6 +3,7 @@ package com.lingg.hellospringboot.services;
 import com.lingg.hellospringboot.dto.request.AuthenticationRequest;
 import com.lingg.hellospringboot.dto.request.IntrospectRequest;
 import com.lingg.hellospringboot.dto.request.LogoutRequest;
+import com.lingg.hellospringboot.dto.request.RefreshRequest;
 import com.lingg.hellospringboot.dto.response.AuthenticationResponse;
 import com.lingg.hellospringboot.dto.response.IntrospectResponse;
 import com.lingg.hellospringboot.entity.InvalidatedToken;
@@ -114,6 +115,29 @@ public class AuthenticationService {
                 .expireTime(expireTime)
                 .build();
         invalidatedTokenRepository.save(invalidatedToken);
+    }
+
+    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
+        var signedJWT = verifyToken(request.getToken());
+
+        var jit = signedJWT.getJWTClaimsSet().getJWTID();
+        var expireTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expireTime(expireTime)
+                .build();
+        invalidatedTokenRepository.save(invalidatedToken);
+
+        var username = signedJWT.getJWTClaimsSet().getSubject();
+        var user = repository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.UNAUTHENTICATED)
+        );
+
+        var token = generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(token)
+                .authenticated(true)
+                .build();
     }
 
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {

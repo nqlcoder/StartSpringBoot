@@ -1,9 +1,6 @@
 package com.lingg.hellospringboot.controller;
 
-import com.lingg.hellospringboot.dto.request.ApiResponse;
-import com.lingg.hellospringboot.dto.request.AuthenticationRequest;
-import com.lingg.hellospringboot.dto.request.IntrospectRequest;
-import com.lingg.hellospringboot.dto.request.LogoutRequest;
+import com.lingg.hellospringboot.dto.request.*;
 import com.lingg.hellospringboot.dto.response.AuthenticationResponse;
 import com.lingg.hellospringboot.dto.response.IntrospectResponse;
 import com.lingg.hellospringboot.services.AuthenticationService;
@@ -33,7 +30,7 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("introspect")
+    @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
@@ -41,10 +38,18 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("logout")
+    @PostMapping("/logout")
     ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
         authenticationService.logout(request);
         return ApiResponse.<Void>builder()
+                .build();
+    }
+
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> refresh(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
                 .build();
     }
 }
