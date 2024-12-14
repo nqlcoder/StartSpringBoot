@@ -1,12 +1,12 @@
 package com.lingg.hellospringboot.services;
 
-import com.lingg.hellospringboot.dto.request.UserCreationRequest;
-import com.lingg.hellospringboot.dto.response.UserResponse;
-import com.lingg.hellospringboot.entity.User;
-import com.lingg.hellospringboot.exception.AppException;
-import com.lingg.hellospringboot.repositories.IUserRepository;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,12 +17,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import com.lingg.hellospringboot.dto.request.UserCreationRequest;
+import com.lingg.hellospringboot.dto.response.UserResponse;
+import com.lingg.hellospringboot.entity.User;
+import com.lingg.hellospringboot.exception.AppException;
+import com.lingg.hellospringboot.repositories.IUserRepository;
 
 @SpringBootTest
 @TestPropertySource("/test.properties")
@@ -32,6 +31,7 @@ public class UserServiceTest {
 
     @MockBean
     private IUserRepository repository;
+
     private UserCreationRequest request;
     private UserResponse userResponse;
     private User user;

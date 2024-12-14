@@ -1,12 +1,13 @@
 package com.lingg.hellospringboot.dto.request;
 
-import com.lingg.hellospringboot.validatior.DobContraint;
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.Size;
+
+import com.lingg.hellospringboot.validatior.DobContraint;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
-import java.time.LocalDate;
 
 @Data
 @Getter
@@ -21,6 +22,7 @@ public class UserCreationRequest {
 
     @Size(min = 8, message = "INVALID_PASSWORD")
     String password;
+
     String firstName;
     String lastName;
 

@@ -1,11 +1,11 @@
 package com.lingg.hellospringboot.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.util.Date;
 
+import jakarta.persistence.*;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -17,5 +17,6 @@ import java.util.Date;
 public class InvalidatedToken {
     @Id
     String id;
+
     Date expireTime;
 }
