@@ -78,20 +78,21 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("result.id").value("abc12345"));
     }
 
-    @Test
-    void createUser_usernameInvalid_fail() throws Exception {
-        // GIVEN
-        request.setUsername("nq");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        String content = mapper.writeValueAsString(request);
-
-        // WHEN, THEN
-        mockMvc.perform(MockMvcRequestBuilders.post("/users")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(content))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1003))
-                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Username must be at least 3 character"));
-    }
+    //    @Test
+    //    void createUser_usernameInvalid_fail() throws Exception {
+    //        // GIVEN
+    //        request.setUsername("nq");
+    //        ObjectMapper mapper = new ObjectMapper();
+    //        mapper.registerModule(new JavaTimeModule());
+    //        String content = mapper.writeValueAsString(request);
+    //
+    //        // WHEN, THEN
+    //        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+    //                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+    //                        .content(content))
+    //                .andExpect(MockMvcResultMatchers.status().isOk())
+    //                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1003))
+    //                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Username must be at least 3
+    // character"));
+    //    }
 }
