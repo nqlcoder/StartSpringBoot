@@ -65,7 +65,7 @@ public class UserController {
         return ApiResponse.<String>builder().result("User has been deleted").build();
     }
 
-    @GetMapping("/myInfo")
+    @GetMapping("/my-info")
     ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getMyInfo())
