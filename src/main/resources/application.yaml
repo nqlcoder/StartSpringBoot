@@ -5,10 +5,13 @@ server:
 
 spring:
   datasource:
-    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3308/identity_service}
-    driverClassName: "com.mysql.cj.jdbc.Driver"
+    # run docker
+    url: ${DBMS_CONNECTION:jdbc:mysql://mysql:3306/identity_service}
+    # run local
+    #url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3307/identity_service}
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
     username: ${DBMS_USERNAME:root}
-    password: ${DBMS_PASSWORD:123456}
+    password: ${DBMS_PASSWORD:root}
   jpa:
     hibernate:
       ddl-auto: update
